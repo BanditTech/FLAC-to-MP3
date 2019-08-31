@@ -1,5 +1,6 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%
 Global TargetDir
 Global YesDelete := True
 Global BitRate := 192
@@ -11,9 +12,15 @@ Global BitRate := 192
 
 Loop %0%  ; For each parameter (or file dropped onto a script):
 {
-    IfInString, %A_Index%, lidarr 
+    IfInString, %A_Index%, lidarr_artist_path
     {
-        EnvGet, TargetDir, %A_Index%
+        EnvGet, TargetDir, lidarr_artist_path
+        FileAppend, %TargetDir% "`n", ConvertFtoMLog.txt
+    }
+    Else IfInString, %A_Index%, lidarr_trackfile_path
+    {
+        EnvGet, TargetDir, lidarr_trackfile_path
+        FileAppend, %TargetDir% "`n", ConvertFtoMLog.txt
     }
     Else
         TargetDir := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
@@ -44,6 +51,7 @@ for file in FLACList
     StringReplace, o, file, flac, mp3
     If !(%0%)
        ToolTip % "Original Filename: " file "`nConverted MP3 Name: " o
+    FileAppend, %file% "  To   " %o% "`n", ConvertFtoMLog.txt
     runwait, ffmpeg  -i "%file%" -ab %BitRate%k -map_metadata 0 -id3v2_version 3 "%o%" , ,Hide
     If YesDelete
         FileDelete, %file%
