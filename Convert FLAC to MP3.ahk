@@ -1,5 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 Global TargetDir
 Global YesDelete := True
@@ -12,7 +11,12 @@ Global BitRate := 192
 
 Loop %0%  ; For each parameter (or file dropped onto a script):
 {
-    TargetDir := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
+    IfInString, %A_Index%, lidarr 
+    {
+        EnvGet, TargetDir, %A_Index%
+    }
+    Else
+        TargetDir := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
     Gosub, ProcessFolder
 }
 If (%0%)
@@ -37,7 +41,6 @@ Loop, Files, %TargetDir%\*.flac, R
 }
 for file in FLACList
 {
-    ;o := "echo " file " | sed -e 's/.flac/.mp3/' -e 's/.FLAC/.mp3/'"
     StringReplace, o, file, flac, mp3
     If !(%0%)
        ToolTip % "Original Filename: " file "`nConverted MP3 Name: " o
