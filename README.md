@@ -8,5 +8,6 @@ Download the script and modify the settings for deleting the origin files, and s
 Inside Lidarr go to the connect settings page
 * add a new connection as a Custom Script
 * Point the path to the compiled script, and in arguements place your Music collection folder
+* You can alternatively use the Environment variables found https://github.com/lidarr/Lidarr/wiki/Custom-Post-Processing-Scripts
 * Make sure to only have the script active on download or upgrade.
 * This script requires that you have FFMPEG installed into your environment variables PATH
