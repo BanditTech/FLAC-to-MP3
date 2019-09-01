@@ -10,6 +10,19 @@ Global BitRate := 192
 ; 224
 ; 256
 ; 320 - Near lossless
+If YesLog
+{
+    FileRead, LogFile, ConvertFtoMLog.txt
+    Loop, Parse, LogFile , `n
+    {
+        IfInString, A_LoopField, %A_YYYY%-%A_MM%-%A_DD%
+        {
+            LogString := LogString . A_LoopField
+        }
+    }
+    FileDelete, ConvertFtoMLog.txt
+    FileAppend, %LogString%, ConvertFtoMLog.txt
+}
 
 Loop %0%  ; For each parameter (or file dropped onto a script):
 {
@@ -17,7 +30,7 @@ Loop %0%  ; For each parameter (or file dropped onto a script):
     {
         EnvGet, TargetDir, lidarr_artist_path
         if YesLog
-            FileAppend, %TargetDir% "    lidarr_artist_path    ", ConvertFtoMLog.txt
+            FileAppend, %A_YYYY%-%A_MM%-%A_DD%  %TargetDir%     lidarr_artist_path`n, ConvertFtoMLog.txt
         Gosub, ProcessFolder
     }
     Else IfInString, %A_Index%, lidarr_trackfile_path
@@ -28,7 +41,7 @@ Loop %0%  ; For each parameter (or file dropped onto a script):
             ExitApp
         }
         if YesLog
-           FileAppend, %file% "    lidarr_trackfile_path    ", ConvertFtoMLog.txt
+           FileAppend, %A_YYYY%-%A_MM%-%A_DD%  %file%     lidarr_trackfile_path`n, ConvertFtoMLog.txt
         Gosub, ProcessFile
     }
     Else
@@ -63,7 +76,7 @@ for file in FLACList
     file := fileArr[1]
     StringReplace, o, file, flac, mp3
     If YesLog
-        FileAppend, %file%  Converted To   %o%`n, ConvertFtoMLog.txt
+        FileAppend, %A_YYYY%-%A_MM%-%A_DD%  %file%  Converted To   %o%`n, ConvertFtoMLog.txt
     runwait, ffmpeg -y -i "%file%" -ab %BitRate%k -map_metadata 0 -id3v2_version 3 -y "%o%" , ,Hide
     If (YesDelete)
         FileDelete, %file%
@@ -77,7 +90,7 @@ ProcessFile:
     If (FileExist("%o%"))
         FileDelete, %o%
     If YesLog
-        FileAppend, %file%   Converted To    %o%`n, ConvertFtoMLog.txt
+        FileAppend, %A_YYYY%-%A_MM%-%A_DD% %file%   Converted To    %o%`n, ConvertFtoMLog.txt
     runwait, ffmpeg -y -i "%file%" -ab %BitRate%k -map_metadata 0 -id3v2_version 3 -y "%o%" , ,Hide
     If (YesDelete)
         FileDelete, %file%
