@@ -10,6 +10,10 @@ Global Log := "ConvertFtoMLog.txt"
 Global MusicFolder := "D:\Media\Music"
 Global spc := 0
 
+EnvGet, EventType, lidarr_eventtype
+If (EventType="Test")
+    ExitApp
+    
 OnExit, Cleanup
 ; Common bitrates:
 ; 192
