@@ -5,6 +5,7 @@ Download the script and modify the settings.
 * Important variables are the MusicFolder, BitRate, ShowGui and YesLog
 * If ShowGui is enabled it becomes a standalone app, will not work as a background script
 * Place the file somewhere it can stay
+* If you want to be able to drop folders onto the script, will need to compile it
 
 Inside Lidarr go to the connect settings page
 * add a new connection as a Custom Script
