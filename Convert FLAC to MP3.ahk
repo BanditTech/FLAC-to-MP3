@@ -13,7 +13,10 @@ Global spc := 0
 EnvGet, EventType, lidarr_eventtype
 If (EventType="Test")
     ExitApp
-    
+Else If (EventType="Download")
+    EnvGet, MusicFolder, lidarr_artist_path
+
+
 OnExit, Cleanup
 ; Common bitrates:
 ; 192
